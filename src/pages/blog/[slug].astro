@@ -1,5 +1,4 @@
 ---
-import MarkdownIt from 'markdown-it';
 import { getCollection, getEntryBySlug } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 
@@ -17,41 +16,47 @@ if (!post) {
     throw new Error(`Post not found: ${slug}`);
 }
 
-const md = new MarkdownIt('commonmark',{
-    html: true
-})
-const result = md.render(post.body);
+// Astro-native markdown renderer (includes Shiki syntax highlighting)
+const { Content } = await post.render();
 ---
+<Layout
+        seo={{
+            title: post.data.title,
+            description: post.data.description
+        }}
+        author={post.data.author}
+        keywords={post.data.tags.join(', ')}
+>
+    <section class="max-w-3xl mx-auto px-4 py-8 bg-gray-900 text-white rounded-lg shadow-lg">
+        <a href="/#blog" class="text-blue-400 hover:underline mb-6 inline-block">← Back</a>
 
-<Layout seo={
-    {
-        title: post.data.title,
-        description: post.data.description
-    }
-} author={post.data.author} keywords={post.data.tags.join(', ')}>
-    <section class="max-w-3xl mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
-        <a href="/#blog" class="text-blue-400 hover:underline mb-4 inline-block">← Back</a>
-        <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
-        <p class="text-gray-400 text-sm mb-4">{post.data.author} | {post.data.date.toDateString()}</p>
-        <div class="prose lg:prose-lg prose-invert" set:html={result} />
+        <article class="prose lg:prose-lg prose-invert max-w-none">
+            <h1>{post.data.title}</h1>
+            <p class="text-sm text-gray-400">
+                {post.data.author} &middot; {post.data.date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })}
+            </p>
+            <Content />
+        </article>
     </section>
 
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            "headline": "{post.data.title}",
-            "author": {
-                "@type": "Person",
-                "name": "{post.data.author}"
-            },
-            "publisher": {
-                "@type": "Organization",
-                "name": "Kavi Castelo Portfolio"
-            },
-            "datePublished": "{post.data.date.toISOString()}",
-            "url": "https://kavicastelo-dev.netlify.app/blogs/{slug}"
-        }
-    </script>
-
+    <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: post.data.title,
+        description: post.data.description,
+        author: {
+            "@type": "Person",
+            name: post.data.author,
+        },
+        publisher: {
+            "@type": "Organization",
+            name: "Kavi Castelo Portfolio",
+        },
+        datePublished: post.data.date.toISOString(),
+        url: `https://kavicastelo-dev.netlify.app/blog/${slug}`
+    })} />
 </Layout>
