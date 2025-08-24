@@ -1,5 +1,6 @@
 ---
 import MarkdownIt from 'markdown-it';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface FAQ {
     question: string;
@@ -8,13 +9,35 @@ interface FAQ {
 
 const { faqs } = Astro.props;
 
-const md = new MarkdownIt('commonmark', { html: true });
+const md = new MarkdownIt({ html: true });
 
-// Convert each FAQ answer to Markdown-rendered HTML
 const faqsWithHtml = faqs.map(faq => ({
     question: faq.question,
-    answer: md.render(faq.answer)
+    answer: DOMPurify.sanitize(md.render(faq.answer))
 }));
+
+// Prepare valid JSON-LD string
+const jsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer
+        }
+    }))
+});
+
+const answer = `Kavi has held several roles, including:
+- **Shareholder and CEO** at Talent Boozt PVT LTD since 2024.
+- **Tech Lead** at SPARK C HR Systems starting in 2024.
+- **Owner & CEO** of Flexiart IT Solutions from 2023 to 2024.
+- **Entrepreneur** in app development and graphic designing since 2022.
+- **Freelancer** in app development and graphic designing from 2021 to 2023. [Learn more](https://kavindukokila.netlify.app/resume)`;
+
+const markdownAnswer = DOMPurify.sanitize(md.render(answer));
 ---
 
 <section class="max-w-3xl mx-auto my-12 p-6 bg-gray-900 text-white rounded-lg shadow-lg" id="faq">
@@ -22,40 +45,22 @@ const faqsWithHtml = faqs.map(faq => ({
 
     <div class="space-y-4" x-data="{ openFaq: null }">
         {faqsWithHtml.map((faq, index) => (
-                <div class="border border-gray-700 rounded-lg">
+                <div class="border border-gray-700 rounded-lg" x-data={`{ isOpen: false, index: ${index} }`}>
                     <button
                             class="w-full text-left p-4 bg-gray-800 hover:bg-gray-700 flex justify-between items-center"
-                            @click="openFaq === index ? openFaq = null : openFaq = index"
+                            @click="isOpen = !isOpen"
                     >
                         <span>{faq.question}</span>
-                        <i class="fa" :class="openFaq === index ? 'fa-minus' : 'fa-plus'"></i>
+                        <i class="fa" :class="isOpen ? 'fa-minus' : 'fa-plus'"></i>
                     </button>
-                    <div class="p-4 bg-gray-700 text-gray-300" x-show="openFaq === index" x-transition>
-                        <div class="prose prose-invert" set:html={faq.answer}></div>
+                    <div class="p-4 bg-gray-700 text-gray-300" x-show="isOpen" x-transition>
+                        <div class="prose prose-invert" set:html={faq.answer} />
                     </div>
                 </div>
         ))}
     </div>
 </section>
 
-<!-- JSON-LD Structured Data -->
-<script>
-    const faqData = faqs.map(faq => ({
-        "@type": "Question",
-        "name": faq.question,
-        "acceptedAnswer": {
-            "@type": "Answer",
-            "text": faq.answer
-        }
-    }));
+<!-- ✅ Valid JSON-LD inserted as raw string -->
+<script type="application/ld+json" set:html={jsonLd} />
 
-    const jsonData = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": faqData
-    });
-
-    document.getElementById('json-data').textContent = jsonData;
-</script>
-
-<script type="application/ld+json" id="json-data"></script>

@@ -10,6 +10,11 @@
     "url": "https://www.geeksforgeeks.org/user/kavicastelo/"
   },
   {
+    "name": "Medium",
+    "icon": "/social-icons/medium.png",
+    "url": "https://medium.com/@kavicastelo"
+  },
+  {
     "name": "Stackoverflow",
     "icon": "/social-icons/stackoverflow.svg",
     "url": "https://stackoverflow.com/users/20531015/kavi-castelo"
