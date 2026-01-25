@@ -1,0 +1,25 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Blog from "../../components/Blog.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+---
+
+<Layout
+    seo={{
+        title: "Blog | Kavi Castelo",
+        description:
+            "Thoughts on software engineering, leadership, and the future of technology by Kavi Castelo.",
+    }}
+>
+    <div class="pt-24 min-h-screen">
+        <Blog limit={Infinity} />
+
+        <section class="pb-24 px-6 max-w-7xl mx-auto flex justify-center">
+            <p class="text-on-surface/40 text-sm">
+                Showing {posts.length} articles
+            </p>
+        </section>
+    </div>
+</Layout>

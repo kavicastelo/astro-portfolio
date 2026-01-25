@@ -1,0 +1,26 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Projects from "../../components/Projects.astro";
+import projects from "../../data/projects.json";
+
+// For the index page, we might want to show all projects
+---
+
+<Layout
+    seo={{
+        title: "Projects | Kavi Castelo",
+        description:
+            "Explore my portfolio of software engineering projects, from SaaS platforms to AI solutions.",
+    }}
+>
+    <div class="pt-24 min-h-screen">
+        <Projects limit={Infinity} />
+
+        <section class="pb-24 px-6 max-w-7xl mx-auto flex justify-center">
+            <!-- Additional content or filters could go here in the future -->
+            <p class="text-on-surface/40 text-sm">
+                Showing all {projects.length} projects
+            </p>
+        </section>
+    </div>
+</Layout>

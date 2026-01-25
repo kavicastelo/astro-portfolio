@@ -1,6 +1,6 @@
 ---
-import MarkdownIt from 'markdown-it';
-import DOMPurify from 'isomorphic-dompurify';
+import MarkdownIt from "markdown-it";
+import DOMPurify from "isomorphic-dompurify";
 
 interface FAQ {
     question: string;
@@ -11,56 +11,131 @@ const { faqs } = Astro.props;
 
 const md = new MarkdownIt({ html: true });
 
-const faqsWithHtml = faqs.map(faq => ({
+const faqsWithHtml = faqs.map((faq: FAQ) => ({
     question: faq.question,
-    answer: DOMPurify.sanitize(md.render(faq.answer))
+    answer: DOMPurify.sanitize(md.render(faq.answer)),
 }));
 
 // Prepare valid JSON-LD string
 const jsonLd = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
+    mainEntity: faqs.map((faq: FAQ) => ({
         "@type": "Question",
         name: faq.question,
         acceptedAnswer: {
             "@type": "Answer",
-            text: faq.answer
-        }
-    }))
+            padding: "1rem",
+            text: faq.answer,
+        },
+    })),
 });
-
-const answer = `Kavi has held several roles, including:
-- **Shareholder and CEO** at Talent Boozt PVT LTD since 2024.
-- **Tech Lead** at SPARK C HR Systems starting in 2024.
-- **Owner & CEO** of Flexiart IT Solutions from 2023 to 2024.
-- **Entrepreneur** in app development and graphic designing since 2022.
-- **Freelancer** in app development and graphic designing from 2021 to 2023. [Learn more](https://kavindukokila.netlify.app/resume)`;
-
-const markdownAnswer = DOMPurify.sanitize(md.render(answer));
 ---
 
-<section class="max-w-3xl mx-auto my-12 p-6 bg-gray-900 text-white rounded-lg shadow-lg" id="faq">
-    <h2 class="text-3xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
+<section class="py-24 px-6 max-w-4xl mx-auto" id="faq">
+    <div class="motion-enter mb-12 text-center">
+        <h2
+            class="text-3xl md:text-4xl font-bold tracking-tight motion-standard"
+        >
+            Common <span class="text-primary neon-text">Questions</span>
+        </h2>
+    </div>
 
-    <div class="space-y-4" x-data="{ openFaq: null }">
-        {faqsWithHtml.map((faq, index) => (
-                <div class="border border-gray-700 rounded-lg" x-data={`{ isOpen: false, index: ${index} }`}>
-                    <button
-                            class="w-full text-left p-4 bg-gray-800 hover:bg-gray-700 flex justify-between items-center"
-                            @click="isOpen = !isOpen"
-                    >
-                        <span>{faq.question}</span>
-                        <i class="fa" :class="isOpen ? 'fa-minus' : 'fa-plus'"></i>
-                    </button>
-                    <div class="p-4 bg-gray-700 text-gray-300" x-show="isOpen" x-transition>
-                        <div class="prose prose-invert" set:html={faq.answer} />
+    <div class="motion-enter space-y-4">
+        {
+            faqsWithHtml.map(
+                (faq: { question: string; answer: string }, index: number) => (
+                    <div class="faq-item border border-border rounded-2xl overflow-hidden motion-standard">
+                        <button
+                            class="faq-trigger w-full text-left p-6 md:p-8 bg-surface-muted hover:bg-border/50 flex justify-between items-center motion-standard focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary motion-press"
+                            aria-expanded="false"
+                            aria-controls={`faq-content-${index}`}
+                        >
+                            <span class="font-bold text-lg md:text-xl pr-8 motion-standard">
+                                {faq.question}
+                            </span>
+                            <svg
+                                class="faq-icon w-6 h-6 motion-standard text-primary"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v12m6-6H6"
+                                />
+                            </svg>
+                        </button>
+                        <div
+                            id={`faq-content-${index}`}
+                            class="faq-content overflow-hidden max-h-0 motion-standard bg-surface"
+                        >
+                            <div
+                                class="p-6 md:p-8 pt-0 prose prose-primary dark:prose-invert max-w-none motion-standard prose-a:text-primary prose-a:hover:text-primary-hover text-on-surface/60"
+                                set:html={faq.answer}
+                            />
+                        </div>
                     </div>
-                </div>
-        ))}
+                ),
+            )
+        }
     </div>
 </section>
 
-<!-- ✅ Valid JSON-LD inserted as raw string -->
 <script type="application/ld+json" set:html={jsonLd} />
 
+<script>
+    function setupFaq() {
+        const items = document.querySelectorAll(".faq-item");
+
+        items.forEach((item) => {
+            const trigger = item.querySelector(".faq-trigger");
+            const content = item.querySelector(".faq-content") as HTMLElement;
+            const icon = item.querySelector(".faq-icon");
+
+            trigger?.addEventListener("click", () => {
+                const isOpen = trigger.getAttribute("aria-expanded") === "true";
+
+                // Close other items
+                document
+                    .querySelectorAll('.faq-trigger[aria-expanded="true"]')
+                    .forEach((t) => {
+                        if (t !== trigger) {
+                            t.setAttribute("aria-expanded", "false");
+                            const c = t.nextElementSibling as HTMLElement;
+                            if (c) c.style.maxHeight = "0";
+                        }
+                    });
+
+                // Toggle current item
+                trigger.setAttribute(
+                    "aria-expanded",
+                    !isOpen ? "true" : "false",
+                );
+                if (!isOpen) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    item.classList.add(
+                        "border-primary",
+                        "shadow-lg",
+                        "shadow-primary/5",
+                    );
+                } else {
+                    content.style.maxHeight = "0";
+                    item.classList.remove(
+                        "border-primary",
+                        "shadow-lg",
+                        "shadow-primary/5",
+                    );
+                }
+            });
+        });
+    }
+
+    // Set up on initial load
+    setupFaq();
+
+    // Re-run for View Transitions
+    document.addEventListener("astro:after-swap", setupFaq);
+</script>
