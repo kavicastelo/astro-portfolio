@@ -1,28 +1,115 @@
 ---
 import projects from "../data/projects.json";
-import {Picture} from 'astro:assets';
+import { Picture } from "astro:assets";
+
+interface Props {
+    limit?: number;
+}
+
+const { limit = 6 } = Astro.props;
+const featuredProjects = projects.slice(0, limit);
 ---
 
-<section class="py-12 bg-gray-900 text-white text-center" id="projects">
-    <h2 class="text-3xl font-bold mb-6">Featured Projects</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
-        {projects.map((project) => (
-            <a href={`/projects/${project.slug}`} class="bg-gray-800 rounded-lg shadow-md p-6 hover:bg-gray-700 transition-colors duration-300">
-                <Picture
-                        src={project.image}
-                        alt={project.title}
-                        width="600"
-                        height="400"
-                        formats={['avif', 'webp']}
-                        class="w-full h-40 object-cover rounded-md mb-4" />
-                <h3 class="text-xl font-semibold mb-2">{project.title}</h3>
-                <p class="text-gray-400">{project.description}</p>
-                <div class="flex flex-wrap gap-2 justify-center mt-3">
-                    {project.tech.languages.map((tech) => (
-                            <span class="bg-blue-600 px-2 py-1 text-sm rounded">{tech}</span>
-                    ))}
-                </div>
-            </a>
-        ))}
+<section class="py-32 px-6 max-w-7xl mx-auto" id="projects">
+    <div class="motion-enter mb-20 text-center">
+        <h2
+            class="text-4xl md:text-5xl font-black tracking-tight mb-6 motion-standard"
+        >
+            Featured <span class="text-primary neon-text">Projects</span>
+        </h2>
+        <p
+            class="text-on-surface/50 max-w-2xl mx-auto text-xl font-medium motion-standard"
+        >
+            Engineering high-impact solutions with bleeding-edge technology.
+        </p>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {
+            featuredProjects.map((project, index) => (
+                <div
+                    class="motion-enter group flex flex-col bg-surface-muted rounded-[2rem] border border-border overflow-hidden motion-standard motion-hover-lift hover:border-neon-blue/50 hover:shadow-[0_20px_50px_rgba(0,243,255,0.15)]"
+                    style={`transition-delay: ${index * 75}ms`}
+                >
+                    <a
+                        href={`/projects/${project.slug}`}
+                        class="block relative aspect-[4/3] overflow-hidden motion-press"
+                    >
+                        <Picture
+                            src={project.image}
+                            alt={project.title}
+                            width="800"
+                            height="600"
+                            formats={["avif", "webp"]}
+                            class="w-full h-full object-cover motion-standard group-hover:scale-110"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-0 group-hover:opacity-100 motion-standard flex items-end p-8">
+                            <span class="text-primary font-black flex items-center gap-3 translate-y-4 group-hover:translate-y-0 motion-standard">
+                                Explore Project
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="3"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </span>
+                        </div>
+                    </a>
+
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold mb-3 group-hover:text-primary motion-standard">
+                            {project.title}
+                        </h3>
+                        <p class="text-on-surface/60 text-base line-clamp-2 mb-8 flex-grow font-medium leading-relaxed motion-standard">
+                            {project.description}
+                        </p>
+
+                        <div class="flex flex-wrap gap-2 pt-6 border-t border-border/50 motion-standard">
+                            {project.tech.languages.slice(0, 3).map((tech) => (
+                                <span class="bg-primary/5 text-primary px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/10 group-hover:border-primary/30 motion-standard">
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+
+    {
+        limit !== Infinity && (
+            <div class="motion-enter mt-20 text-center">
+                <a
+                    href="/projects"
+                    class="inline-flex items-center gap-3 font-black text-on-surface hover:text-primary motion-standard motion-hover-lift motion-press text-lg group"
+                >
+                    Explore Full Archive
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="motion-standard group-hover:translate-x-2"
+                    >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </a>
+            </div>
+        )
+    }
 </section>

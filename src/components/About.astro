@@ -1,81 +1,183 @@
 ---
-import {Picture, Image} from 'astro:assets';
-import js from '../assets/icons/javascript.svg';
-import ts from '../assets/icons/typescript.svg';
-import react from '../assets/icons/react.svg';
-import astro from '../assets/icons/astro.svg';
-import aws from '../assets/icons/aws.svg';
-import angular from '../assets/icons/angular.svg';
-import spring from '../assets/icons/spring.svg';
-import java from '../assets/icons/java.svg';
-import mongo from '../assets/icons/mongo.svg';
-import git from '../assets/icons/git.svg';
+import { Picture, Image } from "astro:assets";
+import js from "../assets/icons/javascript.svg";
+import ts from "../assets/icons/typescript.svg";
+import react from "../assets/icons/react.svg";
+import astro from "../assets/icons/astro.svg";
+import aws from "../assets/icons/aws.svg";
+import angular from "../assets/icons/angular.svg";
+import spring from "../assets/icons/spring.svg";
+import java from "../assets/icons/java.svg";
+import mongo from "../assets/icons/mongo.svg";
+import git from "../assets/icons/git.svg";
+
+const techStack = [
+    { src: js, alt: "JavaScript" },
+    { src: ts, alt: "TypeScript" },
+    { src: java, alt: "Java" },
+    { src: spring, alt: "SpringBoot" },
+    { src: angular, alt: "Angular" },
+    { src: react, alt: "React" },
+    { src: astro, alt: "Astro" },
+    { src: mongo, alt: "MongoDB" },
+    { src: aws, alt: "AWS" },
+    { src: git, alt: "Git" },
+];
+
+const highlights = [
+    { icon: "🚀", text: "10+ Enterprise projects (HRM, ATS, POS, SaaS)" },
+    { icon: "💼", text: "Led & Mentored Tech Teams" },
+    { icon: "🔧", text: "Full-Stack Mastery (Angular, Astro, Java, AWS)" },
+    { icon: "🏆", text: "Passionate about Performance & SEO" },
+];
 ---
 
-<section class="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 max-w-5xl mx-auto p-6" id="about">
-    <!-- Left Column (Main Info) -->
-    <div class="md:w-1/2 text-justify md:text-left">
-        <h2 class="text-3xl font-bold text-white">About Me</h2>
-        <p class="text-gray-300 leading-relaxed">
-            I'm <span class="font-semibold text-white">Kavindu Kokila, commonly known as Kavi Castelo</span>, a
-            passionate
-            <span class="font-semibold text-blue-400">Software Engineer, Tech Lead, and Entrepreneur</span>
-            with a deep love for building scalable, high-performance applications.
-        </p>
-        <p class="mt-4 text-gray-400">
-            Over the years, I’ve developed and led multiple enterprise-grade projects, from
-            <span class="font-semibold text-blue-400">POS & HRM systems</span> to
-            <span class="font-semibold text-blue-400">SaaS platforms and AI-driven solutions.</span>
-        </p>
-        <p class="mt-4 text-gray-400">
-            As a tech leader, I enjoy <span class="font-semibold text-blue-400">mentoring engineers, optimizing systems, and pushing boundaries in innovation.</span>
-            My mission is to create solutions that <span class="font-semibold text-blue-400">not only solve problems but also elevate the tech ecosystem</span>.
-        </p>
-        <p class="mt-4 text-gray-400">
-            With a strong foundation in <span class="font-semibold text-blue-400">full-stack development, DevOps, AI, and
-                    game development</span>, I take pride in delivering <span class="font-semibold text-blue-400">robust, scalable, and future-proof
-                    applications.</span>
-        </p>
+<section class="py-32 px-6 max-w-7xl mx-auto" id="about">
+    <div class="grid lg:grid-cols-2 gap-20 items-start">
+        <!-- Left Column: Story -->
+        <div class="motion-enter space-y-8">
+            <h2
+                class="text-4xl md:text-5xl font-black tracking-tight motion-standard"
+            >
+                About <span class="text-primary neon-text">Me</span>
+            </h2>
+            <div
+                class="space-y-6 text-on-surface/70 leading-relaxed text-xl font-medium motion-standard"
+            >
+                <p>
+                    I'm <span
+                        class="font-bold text-on-surface border-b-2 border-neon-blue/30"
+                        >Kavindu Kokila (Kavi Castelo)</span
+                    >, a visionary <span class="text-primary font-black"
+                        >Software Architect & Tech Leader</span
+                    >
+                    obsessed with performance and scalability.
+                </p>
+                <p>
+                    With over half a decade of deep involvement in tech, I've
+                    engineered robust
+                    <span class="text-on-surface font-bold"
+                        >multi-tenant SaaS architectures</span
+                    > and high-concurrency <span
+                        class="text-on-surface font-bold"
+                        >FinTech & ERP solutions</span
+                    >.
+                </p>
+                <p>
+                    My philosophy? <span class="italic text-primary"
+                        >"Code should be as clean as the UI it powers."</span
+                    > I bridge the gap between complex backend logic and pixel-perfect
+                    frontends.
+                </p>
+            </div>
 
-        <ul class="mt-4 text-gray-400 space-y-2">
-            <li>🚀 4+ years of experience in software development</li>
-            <li>🎯 Expertise in Full-Stack Development & DevOps</li>
-            <li>📌 Tech lead & mentor for upcoming engineers</li>
-            <li>🛠 Building SaaS products & enterprise applications</li>
-        </ul>
-    </div>
-
-    <!-- Right Column (Tech Stack & Quick Facts) -->
-    <div class="md:w-1/2 flex flex-col items-center md:items-start">
-        <h3 class="text-xl font-semibold text-white">Tech Stack</h3>
-        <div class="flex flex-wrap gap-4 mt-3 justify-center md:justify-start">
-            <Image src={js} alt="JavaScript" title="JavaScript" class="w-10 h-10"/>
-            <Image src={ts} alt="TypeScript" title="TypeScript" class="w-10 h-10"/>
-            <Image src={java} alt="Java" title="Java" class="w-10 h-10"/>
-            <Image src={spring} alt="SpringBoot" title="SpringBoot" class="w-10 h-10"/>
-            <Image src={angular} alt="Angular" title="Angular" class="w-10 h-10"/>
-            <Image src={react} alt="React" title="React" class="w-10 h-10"/>
-            <Image src={astro} alt="Astro" title="Astro" class="w-10 h-10"/>
-            <Image src={mongo} alt="MongoDB" title="MongoDB" class="w-10 h-10"/>
-            <Image src={aws} alt="AWS" title="AWS" class="w-10 h-10"/>
-            <Image src={git} alt="Git" title="Git" class="w-10 h-10"/>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12">
+                {
+                    highlights.map((item) => (
+                        <div class="flex items-center gap-4 p-5 bg-surface-muted rounded-2xl border border-border group motion-standard motion-hover-lift motion-press hover:border-primary/50 hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.05)]">
+                            <span class="text-3xl filter drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] group-hover:scale-110 motion-standard">
+                                {item.icon}
+                            </span>
+                            <span class="text-sm font-bold leading-tight group-hover:text-on-surface motion-standard">
+                                {item.text}
+                            </span>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
 
-        <h3 class="text-xl font-semibold text-white mt-6">Quick Facts</h3>
-        <ul class="mt-3 text-gray-400 space-y-2">
-            <li>💻 Coding for 12+ hours daily</li>
-            <li>📅 750+ day GitHub streak</li>
-            <li>🎯 300+ day Problem Solving streak (leetcode, GFG)</li>
-            <li>🌟 100+ projects completed</li>
-            <li>🌍 Passionate about AI & automation</li>
-        </ul>
+        <!-- Right Column: Tech & Stats -->
+        <div class="space-y-16">
+            <!-- Tech Stack -->
+            <div class="motion-enter" style="transition-delay: 150ms;">
+                <h3
+                    class="text-xs font-black uppercase tracking-[0.3em] text-on-surface/40 mb-8 flex items-center gap-4 motion-standard"
+                >
+                    <span class="w-12 h-0.5 bg-primary"></span> Core Stack
+                </h3>
+                <div class="flex flex-wrap gap-5">
+                    {
+                        techStack.map((tech) => (
+                            <div class="group relative p-4 bg-surface-muted rounded-2xl border border-border motion-standard motion-hover-lift motion-press hover:border-neon-blue hover:shadow-[0_0_25px_rgba(0,243,255,0.15)]">
+                                <Image
+                                    src={tech.src}
+                                    alt={tech.alt}
+                                    class="w-10 h-10 grayscale group-hover:grayscale-0 motion-standard scale-90 group-hover:scale-110"
+                                />
+                                <span class="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-on-surface text-surface text-xs font-black rounded-lg opacity-0 group-hover:opacity-100 motion-standard translate-y-2 group-hover:translate-y-0 pointer-events-none whitespace-nowrap shadow-xl">
+                                    {tech.alt}
+                                </span>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
 
-        <h3 class="text-xl font-semibold text-white mt-6">💡 Key Highlights:</h3>
-        <ul class="mt-3 text-gray-400 space-y-2">
-            <li>🚀 10+ Enterprise-Grade Projects (HRM, ATS, POS, SaaS, etc.)</li>
-            <li>💼 Led & Mentored Tech Teams (Building high-performing devs)</li>
-            <li>🔧 Full-Stack Mastery & DevOps (Angular, Astro, AWS, CI/CD)</li>
-            <li>🏆 Passionate About Innovation & Performance Optimization</li>
-        </ul>
+            <!-- Stats Grid -->
+            <div
+                class="motion-enter relative group"
+                style="transition-delay: 300ms;"
+            >
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 to-neon-purple/10 blur-3xl -z-10 opacity-0 group-hover:opacity-100 motion-standard"
+                >
+                </div>
+                <div
+                    class="glass rounded-[2.5rem] p-10 md:p-14 border-border shadow-2xl space-y-10 group-hover:border-primary/30 motion-standard"
+                >
+                    <div class="grid grid-cols-2 gap-10">
+                        <div class="space-y-1 motion-standard">
+                            <p
+                                class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-on-surface to-on-surface/60 group-hover:from-neon-blue group-hover:to-primary motion-standard tracking-tighter"
+                            >
+                                900+
+                            </p>
+                            <p
+                                class="text-xs font-black uppercase tracking-widest text-on-surface/30"
+                            >
+                                GitHub Streak
+                            </p>
+                        </div>
+                        <div class="space-y-1 motion-standard">
+                            <p
+                                class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-on-surface to-on-surface/60 group-hover:from-neon-purple group-hover:to-primary motion-standard tracking-tighter"
+                            >
+                                450+
+                            </p>
+                            <p
+                                class="text-xs font-black uppercase tracking-widest text-on-surface/30"
+                            >
+                                LeetCode PRs
+                            </p>
+                        </div>
+                        <div class="space-y-1 motion-standard">
+                            <p
+                                class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-on-surface to-on-surface/60 group-hover:from-neon-pink group-hover:to-primary motion-standard tracking-tighter"
+                            >
+                                100+
+                            </p>
+                            <p
+                                class="text-xs font-black uppercase tracking-widest text-on-surface/30"
+                            >
+                                Global Projects
+                            </p>
+                        </div>
+                        <div class="space-y-1 motion-standard">
+                            <p
+                                class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-on-surface to-on-surface/60 group-hover:from-neon-blue group-hover:to-neon-purple motion-standard tracking-tighter"
+                            >
+                                12h+
+                            </p>
+                            <p
+                                class="text-xs font-black uppercase tracking-widest text-on-surface/30"
+                            >
+                                Daily Code
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>

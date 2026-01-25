@@ -1,38 +1,126 @@
 ---
 import socials from "../data/socials.json";
-import {Image} from "astro:assets";
+import { Image } from "astro:assets";
 
 const socialLinks = [
     { name: "GitHub", url: "https://github.com/kavicastelo", icon: "github" },
-    { name: "LinkedIn", url: "https://www.linkedin.com/in/kavi-castelo/", icon: "linkedin" },
+    {
+        name: "LinkedIn",
+        url: "https://www.linkedin.com/in/kavi-castelo/",
+        icon: "linkedin",
+    },
     { name: "Twitter", url: "https://x.com/kavicastelo", icon: "twitter" },
-    { name: "Facebook", url: "https://facebook.com/kavi.castelo/", icon: "facebook" }
+    {
+        name: "Facebook",
+        url: "https://facebook.com/kavi.castelo/",
+        icon: "facebook",
+    },
 ];
 ---
 
-<section class="text-center py-16 bg-gray-900 text-white" id="contact">
-    <h2 class="text-3xl font-bold">Let’s Connect & Build the Future</h2>
-    <p class="mt-2 text-gray-400">Have an idea or just want to chat? Reach out and let's make something great!</p>
+<section class="py-24 px-6 max-w-5xl mx-auto text-center" id="contact">
+    <div class="motion-enter space-y-8">
+        <div class="space-y-4">
+            <h2
+                class="text-3xl md:text-5xl font-extrabold tracking-tight motion-standard"
+            >
+                Let’s Connect & <span class="text-primary neon-text"
+                    >Build the Future</span
+                >
+            </h2>
+            <p
+                class="text-on-surface/60 max-w-2xl mx-auto text-lg md:text-xl motion-standard"
+            >
+                Have an idea or just want to chat? Reach out and let's make
+                something great!
+            </p>
+        </div>
 
-    <div class="mt-6">
-        <a href="mailto:kavindu@talentboozt.com" class="text-lg text-blue-400 hover:underline">
-            kavindu@talentboozt
-        </a>
-    </div>
-
-    <div class="flex justify-center gap-6 mt-6">
-        {socialLinks.map((link) => (
-                <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label="{link.name}" class="text-gray-400 hover:text-white">
-                    <i class={`fab fa-${link.icon} text-2xl`}></i>
-                </a>
-        ))}
-    </div>
-
-    <div class="flex flex-wrap justify-center gap-6 mt-10">
-        {socials.map((s) => (
-            <a class="hover:scale-110 transition-all" href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.name}>
-                <Image src={s.icon} alt={s.name} title={s.name} class="w-8 h-8" width="32" height="32"/>
+        <div class="flex flex-col items-center gap-6 motion-standard">
+            <a
+                href="mailto:kavindu@talentboozt.com"
+                class="group relative inline-flex items-center gap-3 px-8 py-4 bg-surface-muted rounded-2xl border border-border motion-standard motion-hover-lift motion-press hover:border-primary"
+            >
+                <div
+                    class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary motion-standard"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path
+                            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        ></path><polyline points="22,6 12,13 2,6"
+                        ></polyline></svg
+                    >
+                </div>
+                <div class="text-left motion-standard">
+                    <p
+                        class="text-xs font-bold text-on-surface/40 uppercase tracking-widest motion-standard"
+                    >
+                        Email Me
+                    </p>
+                    <p class="text-lg md:text-xl font-bold motion-standard">
+                        kavindu@talnova.io
+                    </p>
+                </div>
             </a>
-        ))}
+        </div>
+
+        <div class="pt-12 space-y-8 motion-standard">
+            <h3
+                class="text-sm font-bold text-on-surface/40 uppercase tracking-[0.2em] motion-standard"
+            >
+                Find me on
+            </h3>
+            <div class="flex flex-wrap justify-center gap-4 motion-standard">
+                {
+                    socialLinks.map((link) => (
+                        <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={link.name}
+                            class="w-14 h-14 flex items-center justify-center rounded-2xl bg-surface-muted border border-border motion-standard motion-hover-lift motion-press hover:border-primary hover:text-primary shadow-sm"
+                        >
+                            <i
+                                class={`fab fa-${link.icon} text-2xl motion-standard`}
+                            />
+                        </a>
+                    ))
+                }
+            </div>
+
+            <div
+                class="flex flex-wrap justify-center gap-8 pt-8 opacity-60 hover:opacity-100 motion-standard"
+            >
+                {
+                    socials.map((s) => (
+                        <a
+                            class="motion-standard motion-hover-lift"
+                            href={s.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={s.name}
+                        >
+                            <Image
+                                src={s.icon}
+                                alt={s.name}
+                                title={s.name}
+                                class="w-8 h-8 filter grayscale hover:grayscale-0 motion-standard"
+                                width="32"
+                                height="32"
+                            />
+                        </a>
+                    ))
+                }
+            </div>
+        </div>
     </div>
 </section>

@@ -1,8 +1,9 @@
 ---
-import '../styles/global.css'
+import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import {SEO, type Props as SEOProps} from "astro-seo";
+import { SEO, type Props as SEOProps } from "astro-seo";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
     seo?: SEOProps;
@@ -10,51 +11,118 @@ interface Props {
     author?: string;
 }
 
-const {seo, keywords, author} = Astro.props;
+const { seo, keywords, author } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=5.5, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <meta name="generator" content={Astro.generator}/>
-    <meta name="keywords" content={keywords ?? "Kavi Castelo, Software Engineer, Tech Lead, Full Stack Developer, SaaS Developer, AI Engineer, Cloud Solutions, DevOps, Enterprise Applications, HRM Systems, POS Systems, Job Board Development, ATS Systems, Astro Developer, Angular Expert, Web Performance Optimization, SEO Expert, AEO Optimization, Fast Websites, Professional Portfolio, Cutting-Edge Software, Open Source Contributions, Game Development, Innovation in Tech"}>
-    <meta name="author" content={author ?? "Kavi Castelo"}>
-    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-          crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.10/dist/cdn.min.js" defer></script>
-    <noscript>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    </noscript>
-    <SEO
-        {...seo}
-        title={seo?.title ?? "Kavi Castelo | Portfolio"}
-        description={seo?.description ?? "Kavi Castelo's professional portfolio showcasing top projects and experience."}
-        twitter={{
-            creator: '@kavicastelo',
-            site: '@kavicastelo',
-            card: 'summary_large_image',
-        }}
-        openGraph={{
-            basic: {
-                title: seo?.title ?? "Kavi Castelo | Portfolio",
-                type: 'website',
-                image: '/og.svg',
-            },
-        }}
-    />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-</head>
-<body class="bg-gray-900">
-<Header/>
-<slot/>
-<Footer/>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=5.5, minimum-scale=1.0"
+        />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <meta name="generator" content={Astro.generator} />
+        <meta
+            name="keywords"
+            content={keywords ??
+                "Kavi Castelo, Software Engineer, Tech Lead, Full Stack Developer, SaaS Developer, AI Engineer, Cloud Solutions, DevOps, Enterprise Applications, HRM Systems, POS Systems, Job Board Development, ATS Systems, Astro Developer, Angular Expert, Web Performance Optimization, SEO Expert, AEO Optimization, Fast Websites, Professional Portfolio, Cutting-Edge Software, Open Source Contributions, Game Development, Innovation in Tech"}
+        />
+        <meta name="author" content={author ?? "Kavi Castelo"} />
+
+        <link
+            rel="preload"
+            as="style"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            crossorigin="anonymous"
+            onload="this.onload=null;this.rel='stylesheet'"
+        />
+        <noscript>
+            <link
+                rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            />
+        </noscript>
+
+        <script is:inline>
+            const theme = (() => {
+                if (
+                    typeof localStorage !== "undefined" &&
+                    localStorage.getItem("theme")
+                ) {
+                    return localStorage.getItem("theme");
+                }
+                if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                    return "dark";
+                }
+                return "light";
+            })();
+
+            if (theme === "light") {
+                document.documentElement.classList.remove("dark");
+            } else {
+                document.documentElement.classList.add("dark");
+            }
+            window.localStorage.setItem("theme", theme);
+        </script>
+
+        <SEO
+            {...seo}
+            title={seo?.title ?? "Kavi Castelo | Portfolio"}
+            description={seo?.description ??
+                "Kavi Castelo's professional portfolio showcasing top projects and experience."}
+            twitter={{
+                creator: "@kavicastelo",
+                site: "@kavicastelo",
+                card: "summary_large_image",
+            }}
+            openGraph={{
+                basic: {
+                    title: seo?.title ?? "Kavi Castelo | Portfolio",
+                    type: "website",
+                    image: "/og.svg",
+                },
+            }}
+        />
+        <link rel="sitemap" href="/sitemap-index.xml" />
+        <ClientRouter />
+    </head>
+    <body
+        class="bg-surface text-on-surface antialiased selection:bg-primary/30 relative overflow-x-hidden"
+    >
+        <!-- Global Neon Flares -->
+        <div
+            class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-neon-blue/5 rounded-full blur-[120px] -z-20 pointer-events-none"
+        >
+        </div>
+        <div
+            class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-neon-purple/5 rounded-full blur-[150px] -z-20 pointer-events-none"
+        >
+        </div>
+
+        <Header />
+        <main>
+            <slot />
+        </main>
+        <Footer />
+    </body>
 </html>

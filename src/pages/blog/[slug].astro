@@ -1,9 +1,14 @@
 ---
-import { getCollection, getEntryBySlug } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 
 const { slug } = Astro.params;
-const post = await getEntryBySlug("blog", slug);
+
+if (!slug) {
+    throw new Error("Slug is required");
+}
+
+const post = await getEntry("blog", slug);
 
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
@@ -19,44 +24,127 @@ if (!post) {
 // Astro-native markdown renderer (includes Shiki syntax highlighting)
 const { Content } = await post.render();
 ---
-<Layout
-        seo={{
-            title: post.data.title,
-            description: post.data.description
-        }}
-        author={post.data.author}
-        keywords={post.data.tags.join(', ')}
->
-    <section class="max-w-3xl mx-auto px-4 py-8 bg-gray-900 text-white rounded-lg shadow-lg">
-        <a href="/#blog" class="text-blue-400 hover:underline mb-6 inline-block">← Back</a>
 
-        <article class="prose lg:prose-lg prose-invert max-w-none">
-            <h1>{post.data.title}</h1>
-            <p class="text-sm text-gray-400">
-                {post.data.author} &middot; {post.data.date.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            })}
-            </p>
-            <Content />
-        </article>
+<Layout
+    seo={{
+        title: post.data.title,
+        description: post.data.description,
+    }}
+    author={post.data.author}
+    keywords={post.data.tags.join(", ")}
+>
+    <section class="py-24 px-6 min-h-screen">
+        <div class="max-w-4xl mx-auto">
+            <a
+                href="/#blog"
+                class="inline-flex items-center gap-2 text-primary hover:text-primary-hover font-bold mb-12 transition-colors group"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="transition-transform group-hover:-translate-x-1"
+                    ><line x1="19" y1="12" x2="5" y2="12"></line><polyline
+                        points="12 19 5 12 12 5"></polyline></svg
+                >
+                Back to Articles
+            </a>
+
+            <div class="motion-enter">
+                <header class="mb-16 space-y-6 motion-standard">
+                    <div
+                        class="flex items-center gap-3 text-sm font-medium text-on-surface/40 motion-standard"
+                    >
+                        <span
+                            class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-xs uppercase tracking-widest font-bold motion-standard"
+                        >
+                            {post.data.tags[0] || "Engineering"}
+                        </span>
+                        <span>•</span>
+                        <time
+                            datetime={post.data.date.toISOString()}
+                            class="motion-standard"
+                        >
+                            {
+                                post.data.date.toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                })
+                            }
+                        </time>
+                    </div>
+
+                    <h1
+                        class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight motion-standard"
+                    >
+                        {post.data.title}
+                    </h1>
+
+                    <div
+                        class="flex items-center gap-4 pt-4 border-t border-border motion-standard"
+                    >
+                        <div
+                            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold motion-standard"
+                        >
+                            {post.data.author.charAt(0)}
+                        </div>
+                        <div class="motion-standard">
+                            <p class="font-bold">{post.data.author}</p>
+                            <p class="text-xs text-on-surface/50">
+                                Software Architect & Tech Leader
+                            </p>
+                        </div>
+                    </div>
+                </header>
+
+                <article
+                    class="prose prose-lg md:prose-xl dark:prose-invert max-w-none
+                    prose-headings:font-bold prose-headings:tracking-tight
+                    prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                    prose-pre:bg-surface-muted prose-pre:border prose-pre:border-border
+                    prose-img:rounded-3xl prose-img:border prose-img:border-border motion-standard
+                    prose-p:text-on-surface/60 prose-a:text-primary prose-a:hover:text-primary-hover
+                    prose-h3:text-on-surface/80 prose-h4:text-on-surface/80 prose-h5:text-on-surface/80 prose-h6:text-on-surface/80 prose-h2:text-on-surface/80 prose-h1:text-on-surface/80
+                    prose-strong:text-on-surface prose-strong:font-bold prose-strong:font-medium prose-strong:text-primary prose-strong:hover:text-primary-hover
+                    prose-em:text-on-surface prose-em:font-bold prose-em:font-medium prose-em:text-primary prose-em:hover:text-primary-hover
+                    prose-blockquote:text-on-surface prose-blockquote:font-bold prose-blockquote:font-medium prose-blockquote:text-primary prose-blockquote:hover:text-primary-hover
+                    prose-blockquote:rounded-3xl prose-blockquote:px-2 prose-blockquote:py-1 prose-blockquote:font-mono prose-blockquote:font-medium prose-blockquote:text-primary prose-blockquote:hover:text-primary-hover
+                    prose-blockquote:border prose-blockquote:border-border prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:pr-4 prose-blockquote:py-4 prose-blockquote:mt-6 prose-blockquote:mb-6 prose-blockquote:space-y-2 prose-blockquote:font-medium prose-blockquote:text-primary prose-blockquote:hover:text-primary-hover
+                    prose-ul:text-on-surface prose-ul:font-bold prose-ul:font-medium prose-ul:text-primary prose-ul:hover:text-primary-hover
+                    prose-ul:rounded-3xl prose-ul:px-2 prose-ul:py-1 prose-ul:font-mono prose-ul:font-medium prose-ul:text-primary prose-ul:hover:text-primary-hover
+                    prose-ul:border prose-ul:border-border prose-ul:border-l-4 prose-ul:border-primary prose-ul:pl-6 prose-ul:pr-4 prose-ul:py-4 prose-ul:mt-6 prose-ul:mb-6 prose-ul:space-y-2 prose-ul:font-medium prose-ul:text-primary prose-ul:hover:text-primary-hover
+                    prose-code:background-surface-muted prose-code:text-primary"
+                >
+                    <Content />
+                </article>
+            </div>
+        </div>
     </section>
 
-    <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        headline: post.data.title,
-        description: post.data.description,
-        author: {
-            "@type": "Person",
-            name: post.data.author,
-        },
-        publisher: {
-            "@type": "Organization",
-            name: "Kavi Castelo Portfolio",
-        },
-        datePublished: post.data.date.toISOString(),
-        url: `https://kavicastelo-dev.netlify.app/blog/${slug}`
-    })} />
+    <script
+        type="application/ld+json"
+        set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.data.title,
+            description: post.data.description,
+            author: {
+                "@type": "Person",
+                name: post.data.author,
+            },
+            publisher: {
+                "@type": "Organization",
+                name: "Kavi Castelo Portfolio",
+            },
+            datePublished: post.data.date.toISOString(),
+            url: `https://kavicastelo-dev.netlify.app/blog/${slug}`,
+        })}
+    />
 </Layout>

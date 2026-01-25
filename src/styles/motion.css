@@ -1,0 +1,89 @@
+:root {
+    /* ─────────────────────────
+     Duration tokens
+     ───────────────────────── */
+    --motion-duration-instant: 0ms;
+    --motion-duration-fast: 150ms;
+    --motion-duration-medium: 300ms;
+    --motion-duration-slow: 500ms;
+
+    /* ─────────────────────────
+     Easing tokens (Gemini-inspired)
+     ───────────────────────── */
+    --motion-ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --motion-ease-emphasized: cubic-bezier(0.2, 0.0, 0, 1);
+    --motion-ease-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+    --motion-ease-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+
+    /* ─────────────────────────
+     Distance & scale tokens
+     ───────────────────────── */
+    --motion-distance-xs: 2px;
+    --motion-distance-sm: 4px;
+    --motion-distance-md: 8px;
+    --motion-distance-lg: 16px;
+
+    --motion-scale-hover: 1.02;
+    --motion-scale-press: 0.98;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --motion-duration-fast: 0ms;
+        --motion-duration-medium: 0ms;
+        --motion-duration-slow: 0ms;
+    }
+}
+
+/* ─────────────────────────
+   Utility Classes
+   ───────────────────────── */
+
+.motion-standard {
+    transition-property: transform, opacity, background-color, color, box-shadow, border-color;
+    transition-duration: var(--motion-duration-medium);
+    transition-timing-function: var(--motion-ease-standard);
+}
+
+.motion-hover-lift:hover {
+    transform: translateY(calc(-1 * var(--motion-distance-sm))) scale(var(--motion-scale-hover));
+}
+
+.motion-press:active {
+    transform: scale(var(--motion-scale-press));
+}
+
+.motion-focus:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 40%, transparent);
+}
+
+/* Entrance Animations */
+.motion-enter {
+    opacity: 0;
+    transform: translateY(var(--motion-distance-lg));
+    pointer-events: none;
+}
+
+.motion-enter.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition:
+        opacity var(--motion-duration-medium) var(--motion-ease-decelerate),
+        transform var(--motion-duration-medium) var(--motion-ease-decelerate);
+}
+
+.motion-fade {
+    animation: fade-in var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
